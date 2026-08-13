@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Brothers Premier League 6 | Cricket Tournament Registration</title>
+<meta name="description" content="Register now for Brothers Premier League 6 - the ultimate cricket tournament." />
+
+<!-- Google Fonts: Anton for bold display headings, Poppins for clean body text -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================= */
+  /* CSS VARIABLES - CRICKET THEME */
+  /* ============================= */
+  :root{
+    --navy-950:#05070f;
+    --navy-900:#070b18;
+    --navy-800:#0c1226;
+    --navy-700:#121a36;
+    --pitch-green:#0f5132;
+    --pitch-green-light:#1e8a4c;
+    --gold:#f4c430;
+    --gold-light:#ffe08a;
+    --gold-deep:#c9962e;
+    --white:#f5f7fb;
+    --muted:#9fb0c9;
+    --danger:#ff5470;
+    --success:#3ddc84;
+    --glass-bg:rgba(18, 26, 54, 0.55);
+    --glass-border:rgba(244, 196, 48, 0.25);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family:'Poppins', sans-serif;
+    background:var(--navy-950);
+    color:var(--white);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  h1,h2,h3, .display{
+    font-family:'Anton', sans-serif;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+
+  a{ color:inherit; }
+
+  /* ============================= */
+  /* ANIMATED STADIUM BACKGROUND    */
+  /* ============================= */
+  .bg-layer{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(30,138,76,0.25), transparent 40%),
+      radial-gradient(circle at 80% 10%, rgba(244,196,48,0.12), transparent 45%),
+      linear-gradient(180deg, var(--navy-950) 0%, var(--navy-900) 45%, #081c14 100%);
+  }
+
+  /* stadium floodlight glow beams */
+  .stadium-light{
+    position:absolute;
+    top:-10%;
+    width:40vw;
+    height:140vh;
+    background:radial-gradient(ellipse at top, rgba(244,196,48,0.18), transparent 60%);
+    filter:blur(10px);
+    transform-origin:top center;
+    animation:flicker 6s ease-in-out infinite;
+  }
+  .stadium-light.l1{ left:-10%; transform:rotate(12deg); animation-delay:0s; }
+  .stadium-light.l2{ left:60%; transform:rotate(-10deg); animation-delay:1.5s; }
+  .stadium-light.l3{ left:30%; transform:rotate(2deg); animation-delay:3s; opacity:0.6; }
+
+  @keyframes flicker{
+    0%,100%{ opacity:0.55; }
+    50%{ opacity:0.85; }
+  }
+
+  /* stitching pattern strip (cricket ball seam inspired) */
+  .seam-pattern{
+    position:absolute;
+    bottom:0; left:0; right:0;
+    height:140px;
+    background-image:repeating-linear-gradient(
+      -45deg,
+      rgba(244,196,48,0.10) 0px,
+      rgba(244,196,48,0.10) 2px,
+      transparent 2px,
+      transparent 22px
+    );
+    opacity:0.5;
+    mask-image:linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  }
+
+  /* floating particles = tiny cricket balls */
+  .particles{
+    position:absolute; inset:0;
+  }
+  .particle{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #d94b2b, #8a2b16 70%);
+    box-shadow:0 0 6px rgba(217,75,43,0.6);
+    opacity:0.55;
+    animation:floatUp linear infinite;
+  }
+  .particle::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:
+      linear-gradient(transparent 45%, rgba(255,255,255,0.55) 46%, rgba(255,255,255,0.55) 48%, transparent 49%),
+      linear-gradient(135deg, transparent 45%, rgba(255,255,255,0.4) 46%, rgba(255,255,255,0.4) 48%, transparent 49%);
+  }
+  @keyframes floatUp{
+    0%{ transform:translateY(110vh) rotate(0deg); opacity:0; }
+    10%{ opacity:0.6; }
+    90%{ opacity:0.5; }
+    100%{ transform:translateY(-10vh) rotate(360deg); opacity:0; }
+  }
+
+  /* bouncing cricket ball travelling across the pitch, drawn as SVG */
+  .bounce-ball{
+    position:absolute;
+    width:38px;
+    height:38px;
+    z-index:1;
+    filter:drop-shadow(0 8px 10px rgba(0,0,0,0.5));
+    animation:bounceAcross 10s ease-in-out infinite;
+  }
+  .bounce-ball.b2{
+    width:26px;
+    height:26px;
+    animation-duration:13s;
+    animation-delay:4s;
+    top:6%;
+  }
+  @keyframes bounceAcross{
+    0%{ left:-8%; top:10%; transform:rotate(0deg); }
+    12%{ top:26%; }
+    24%{ left:22%; top:8%; transform:rotate(220deg); }
+    36%{ top:26%; }
+    50%{ left:48%; top:6%; transform:rotate(440deg); }
+    62%{ top:26%; }
+    76%{ left:74%; top:9%; transform:rotate(660deg); }
+    88%{ top:26%; }
+    100%{ left:106%; top:10%; transform:rotate(880deg); }
+  }
+
+  /* decorative stumps + bails, drawn with CSS, used as flair on cards */
+  .stumps-decor{
+    position:absolute;
+    bottom:-6px;
+    right:14px;
+    display:flex;
+    align-items:flex-end;
+    gap:5px;
+    opacity:0.35;
+    pointer-events:none;
+  }
+  .stumps-decor .stump{
+    width:6px;
+    height:46px;
+    background:linear-gradient(180deg, var(--gold-light), var(--gold-deep));
+    border-radius:3px 3px 0 0;
+  }
+  .stumps-decor .bail{
+    position:absolute;
+    top:-4px;
+    left:-2px;
+    width:26px;
+    height:4px;
+    background:var(--gold-light);
+    border-radius:2px;
+  }
+
+  /* ============================= */
+  /* LAYOUT WRAPPER                 */
+  /* ============================= */
+  .page{
+    position:relative;
+    z-index:1;
+    max-width:1000px;
+    margin:0 auto;
+    padding:0 20px 60px;
+  }
+
+  /* ============================= */
+  /* HEADER / HERO                  */
+  /* ============================= */
+  header{
+    text-align:center;
+    padding:50px 0 40px;
+  }
+
+  .logo-badge{
+    width:96px;
+    height:96px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 55%, var(--gold-deep) 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:44px;
+    box-shadow:0 0 0 4px rgba(244,196,48,0.15), 0 0 30px rgba(244,196,48,0.45), inset 0 -6px 10px rgba(0,0,0,0.25);
+    animation:spinSlow 14s linear infinite;
+  }
+  @keyframes spinSlow{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
+  }
+
+  .tagline-pill{
+    display:inline-block;
+    padding:6px 18px;
+    border-radius:999px;
+    background:rgba(30,138,76,0.18);
+    border:1px solid rgba(30,138,76,0.5);
+    color:var(--pitch-green-light);
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+
+  .hero-title{
+    font-size:clamp(2.4rem, 9vw, 5.2rem);
+    line-height:1.05;
+    color:var(--white);
+    text-shadow:0 0 25px rgba(244,196,48,0.25);
+  }
+  .hero-title .accent{
+    color:var(--gold);
+    display:block;
+    text-shadow:0 0 30px rgba(244,196,48,0.55);
+  }
+
+  .hero-sub{
+    margin-top:16px;
+    color:var(--muted);
+    font-size:clamp(0.95rem, 2.4vw, 1.15rem);
+    max-width:560px;
+    margin-inline:auto;
+    font-weight:300;
+  }
+
+  .hero-icons{
+    margin-top:26px;
+    font-size:2rem;
+    display:flex;
+    gap:22px;
+    justify-content:center;
+    filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+  }
+  .hero-icons span{
+    display:inline-block;
+    animation:bob 3s ease-in-out infinite;
+  }
+  .hero-icons span:nth-child(2){ animation-delay:0.4s; }
+  .hero-icons span:nth-child(3){ animation-delay:0.8s; }
+  @keyframes bob{
+    0%,100%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(-8px) rotate(8deg); }
+  }
+
+  /* ============================= */
+  /* SECTION CARD (glassmorphism)   */
+  /* ============================= */
+  .card{
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
+    border-radius:22px;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05);
+    padding:32px;
+    margin-bottom:36px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:'';
+    position:absolute;
+    top:-2px; left:-2px; right:-2px;
+    height:4px;
+    background:linear-gradient(90deg, var(--pitch-green-light), var(--gold), var(--pitch-green-light));
+    background-size:200% 100%;
+    animation:shimmer 4s linear infinite;
+  }
+  @keyframes shimmer{
+    to{ background-position:200% 0; }
+  }
+
+  .section-heading{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:clamp(1.4rem, 4vw, 1.9rem);
+    color:var(--gold);
+    margin-bottom:8px;
+  }
+  .section-heading .num{
+    background:var(--pitch-green);
+    color:var(--white);
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Anton', sans-serif;
+    font-size:1rem;
+    flex-shrink:0;
+  }
+
+  .section-desc{
+    color:var(--muted);
+    font-size:0.92rem;
+    margin-bottom:22px;
+    font-weight:300;
+  }
+
+  /* ============================= */
+  /* TOURNAMENT INFO CARD           */
+  /* ============================= */
+  .info-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+  }
+  .info-tile{
+    background:rgba(5,7,15,0.35);
+    border:1px solid rgba(244,196,48,0.18);
+    border-radius:14px;
+    padding:18px;
+    text-align:center;
+    transition:transform 0.2s ease, border-color 0.2s ease;
+  }
+  .info-tile:hover{
+    transform:translateY(-3px);
+    border-color:var(--gold);
+  }
+  .info-tile .icon{
+    font-size:1.8rem;
+    display:block;
+    margin-bottom:8px;
+  }
+  .info-tile .label{
+    font-size:0.72rem;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .info-tile .value{
+    font-family:'Anton', sans-serif;
+    color:var(--gold);
+    font-size:1.05rem;
+    letter-spacing:0.5px;
+  }
+  .info-tile .value small{
+    display:block;
+    font-family:'Poppins', sans-serif;
+    color:var(--white);
+    font-size:0.78rem;
+    letter-spacing:0;
+    margin-top:2px;
+    text-transform:none;
+  }
+  @media (max-width:640px){
+    .info-grid{ grid-template-columns:1fr 1fr; }
+  }
+
+  /* owner opt-in toggle switch */
+  .owner-toggle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    background:rgba(5,7,15,0.35);
+    border:1.5px solid rgba(159,176,201,0.25);
+    border-radius:12px;
+    padding:13px 16px;
+  }
+  .owner-toggle .owner-text{
+    font-size:0.92rem;
+    font-weight:500;
+  }
+  .owner-toggle .owner-text small{
+    display:block;
+    color:var(--muted);
+    font-size:0.76rem;
+    font-weight:300;
+    margin-top:2px;
+  }
+  .switch{
+    position:relative;
+    display:inline-block;
+    width:50px;
+    height:28px;
+    flex-shrink:0;
+  }
+  .switch input{
+    opacity:0;
+    width:0;
+    height:0;
+  }
+  .switch .slider{
+    position:absolute;
+    cursor:pointer;
+    inset:0;
+    background:rgba(159,176,201,0.3);
+    border-radius:999px;
+    transition:background 0.25s ease;
+  }
+  .switch .slider::before{
+    content:'🏏';
+    position:absolute;
+    height:22px;
+    width:22px;
+    left:3px;
+    bottom:3px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    background:var(--white);
+    border-radius:50%;
+    transition:transform 0.25s ease;
+    box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  }
+  .switch input:checked + .slider{
+    background:var(--pitch-green-light);
+  }
+  .switch input:checked + .slider::before{
+    transform:translateX(22px);
+  }
+
+  .fee-preview{
+    text-align:center;
+    font-size:0.95rem;
+    color:var(--white);
+    background:rgba(244,196,48,0.08);
+    border:1px dashed rgba(244,196,48,0.35);
+    border-radius:12px;
+    padding:10px 14px;
+  }
+  .fee-preview strong{
+    color:var(--gold);
+    font-size:1.1rem;
+  }
+
+  /* ============================= */
+  /* QR PAYMENT CARD                */
+  /* ============================= */
+  .qr-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:16px;
+  }
+  .qr-frame{
+    position:relative;
+    padding:14px;
+    border-radius:20px;
+    background:linear-gradient(145deg, rgba(244,196,48,0.12), rgba(15,81,50,0.2));
+    border:2px solid var(--gold);
+    box-shadow:0 0 25px rgba(244,196,48,0.35), 0 0 60px rgba(30,138,76,0.15);
+    animation:glowPulse 3.2s ease-in-out infinite;
+  }
+  @keyframes glowPulse{
+    0%,100%{ box-shadow:0 0 20px rgba(244,196,48,0.25), 0 0 50px rgba(30,138,76,0.1); }
+    50%{ box-shadow:0 0 35px rgba(244,196,48,0.5), 0 0 70px rgba(30,138,76,0.25); }
+  }
+  .qr-frame img{
+    display:block;
+    width:220px;
+    height:220px;
+    object-fit:contain;
+    border-radius:12px;
+    background:#fff;
+  }
+  .qr-corner{
+    position:absolute;
+    width:22px;
+    height:22px;
+    border:3px solid var(--gold);
+  }
+  .qr-corner.tl{ top:-4px; left:-4px; border-right:none; border-bottom:none; border-top-left-radius:8px; }
+  .qr-corner.tr{ top:-4px; right:-4px; border-left:none; border-bottom:none; border-top-right-radius:8px; }
+  .qr-corner.bl{ bottom:-4px; left:-4px; border-right:none; border-top:none; border-bottom-left-radius:8px; }
+  .qr-corner.br{ bottom:-4px; right:-4px; border-left:none; border-top:none; border-bottom-right-radius:8px; }
+
+  .qr-instructions{
+    text-align:center;
+    font-size:0.95rem;
+    color:var(--white);
+    max-width:420px;
+  }
+  .qr-instructions strong{
+    color:var(--gold);
+    font-size:1.1rem;
+  }
+
+  /* ============================= */
+  /* FORM STYLES                    */
+  /* ============================= */
+  .form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+  }
+  .form-group{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .form-group.full{
+    grid-column:1 / -1;
+  }
+
+  label{
+    font-size:0.82rem;
+    font-weight:600;
+    letter-spacing:0.5px;
+    color:var(--gold-light);
+    text-transform:uppercase;
+  }
+
+  input, select{
+    width:100%;
+    padding:13px 16px;
+    border-radius:12px;
+    border:1.5px solid rgba(159,176,201,0.25);
+    background:rgba(5,7,15,0.45);
+    color:var(--white);
+    font-family:'Poppins', sans-serif;
+    font-size:0.98rem;
+    outline:none;
+    transition:border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+  }
+  input::placeholder{ color:rgba(159,176,201,0.6); }
+
+  select{
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' stroke='%23F4C430' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 16px center;
+    cursor:pointer;
+  }
+  select option{
+    background:var(--navy-800);
+    color:var(--white);
+  }
+
+  input:focus, select:focus{
+    border-color:var(--gold);
+    box-shadow:0 0 0 4px rgba(244,196,48,0.15);
+    transform:translateY(-1px);
+  }
+
+  input.invalid, select.invalid{
+    border-color:var(--danger);
+    box-shadow:0 0 0 3px rgba(255,84,112,0.15);
+  }
+
+  .field-error{
+    font-size:0.78rem;
+    color:var(--danger);
+    min-height:16px;
+    font-weight:400;
+  }
+
+  .submit-btn{
+    grid-column:1 / -1;
+    margin-top:10px;
+    padding:16px 24px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg, var(--gold-light), var(--gold) 45%, var(--gold-deep));
+    color:#1a1305;
+    font-family:'Anton', sans-serif;
+    font-size:1.15rem;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    box-shadow:0 10px 30px rgba(244,196,48,0.3);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+  }
+  .submit-btn:hover{
+    transform:translateY(-2px) scale(1.01);
+    box-shadow:0 14px 36px rgba(244,196,48,0.45);
+  }
+  .submit-btn:active{
+    transform:translateY(0) scale(0.99);
+  }
+  .submit-btn:disabled{
+    opacity:0.75;
+    cursor:not-allowed;
+    transform:none;
+  }
+
+  .spinner{
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    border:3px solid rgba(26,19,5,0.3);
+    border-top-color:#1a1305;
+    animation:spin 0.7s linear infinite;
+    display:none;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .submit-btn.loading .btn-label{ opacity:0.7; }
+  .submit-btn.loading .spinner{ display:inline-block; }
+
+  .form-status{
+    grid-column:1 / -1;
+    text-align:center;
+    font-size:0.9rem;
+    min-height:20px;
+    color:var(--danger);
+    font-weight:500;
+  }
+
+  @media (max-width:640px){
+    .form-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ============================= */
+  /* SUCCESS MODAL                  */
+  /* ============================= */
+  .modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(2,4,10,0.75);
+    backdrop-filter:blur(4px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.3s ease;
+    padding:20px;
+  }
+  .modal-overlay.show{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .modal-box{
+    background:linear-gradient(160deg, var(--navy-800), var(--navy-900));
+    border:1px solid var(--glass-border);
+    border-radius:24px;
+    padding:44px 32px;
+    text-align:center;
+    max-width:400px;
+    box-shadow:0 0 60px rgba(244,196,48,0.25), 0 20px 60px rgba(0,0,0,0.6);
+    transform:scale(0.8) translateY(30px);
+    transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .modal-overlay.show .modal-box{
+    transform:scale(1) translateY(0);
+  }
+
+  .modal-emoji{
+    font-size:3.6rem;
+    display:block;
+    margin-bottom:14px;
+    animation:pop 0.6s ease;
+  }
+  @keyframes pop{
+    0%{ transform:scale(0); }
+    60%{ transform:scale(1.25); }
+    100%{ transform:scale(1); }
+  }
+
+  .modal-box h3{
+    color:var(--gold);
+    font-size:1.6rem;
+    margin-bottom:10px;
+  }
+  .modal-box p{
+    color:var(--muted);
+    font-size:0.95rem;
+    margin-bottom:22px;
+    line-height:1.5;
+  }
+  .modal-close{
+    padding:11px 28px;
+    border:none;
+    border-radius:12px;
+    background:var(--pitch-green-light);
+    color:var(--white);
+    font-weight:600;
+    cursor:pointer;
+    font-family:'Poppins', sans-serif;
+    transition:background 0.2s ease, transform 0.2s ease;
+  }
+  .modal-close:hover{
+    background:var(--pitch-green);
+    transform:translateY(-1px);
+  }
+
+  /* ============================= */
+  /* FOOTER                         */
+  /* ============================= */
+  footer{
+    text-align:center;
+    padding:30px 0 10px;
+    color:var(--muted);
+    font-size:0.85rem;
+    border-top:1px solid rgba(159,176,201,0.12);
+    margin-top:10px;
+  }
+  footer .committee-title{
+    color:var(--gold);
+    font-family:'Anton', sans-serif;
+    letter-spacing:1px;
+    font-size:1rem;
+    margin-bottom:14px;
+  }
+  footer .committee-list{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px 22px;
+    list-style:none;
+    margin-bottom:18px;
+    padding:0;
+  }
+  footer .committee-list li{
+    color:var(--white);
+    font-size:0.85rem;
+    font-weight:500;
+  }
+  footer .committee-list li span{
+    display:block;
+    color:var(--gold-light);
+    font-size:0.78rem;
+    font-weight:400;
+  }
+  footer .credit{
+    font-size:0.78rem;
+    color:var(--muted);
+    margin-top:4px;
+  }
+  footer .heart{
+    color:var(--danger);
+    display:inline-block;
+    animation:heartbeat 1.4s ease-in-out infinite;
+  }
+  @keyframes heartbeat{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.25); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ANIMATED BACKGROUND LAYER -->
+  <div class="bg-layer">
+    <div class="stadium-light l1"></div>
+    <div class="stadium-light l2"></div>
+    <div class="stadium-light l3"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- animated bouncing cricket balls with stitched seams -->
+    <svg class="bounce-ball" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="47" fill="#c1272d" stroke="#7a1015" stroke-width="3"/>
+      <path d="M50 3 C 28 30, 28 70, 50 97" fill="none" stroke="#fce8b0" stroke-width="3" stroke-dasharray="5 4"/>
+      <path d="M50 3 C 72 30, 72 70, 50 97" fill="none" stroke="#fce8b0" stroke-width="3" stroke-dasharray="5 4"/>
+    </svg>
+    <svg class="bounce-ball b2" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="47" fill="#c1272d" stroke="#7a1015" stroke-width="3"/>
+      <path d="M50 3 C 28 30, 28 70, 50 97" fill="none" stroke="#fce8b0" stroke-width="3" stroke-dasharray="5 4"/>
+      <path d="M50 3 C 72 30, 72 70, 50 97" fill="none" stroke="#fce8b0" stroke-width="3" stroke-dasharray="5 4"/>
+    </svg>
+
+    <div class="seam-pattern"></div>
+  </div>
+
+  <div class="page">
+
+    <!-- ===================== HEADER / HERO ===================== -->
+    <header>
+      <div class="logo-badge" aria-hidden="true">🏆</div>
+      <div class="tagline-pill">Season 6 &middot; Registrations Open</div>
+      <h1 class="hero-title">
+        BROTHERS PREMIER
+        <span class="accent">LEAGUE 6</span>
+      </h1>
+      <p class="hero-sub">Where brothers become rivals for a day and champions for a season. Gear up, register, and step onto the pitch for BPL 6!</p>
+      <div class="hero-icons" aria-hidden="true">
+        <span>🏏</span><span>🏟️</span><span>🏆</span>
+      </div>
+    </header>
+
+    <!-- ===================== TOURNAMENT INFO ===================== -->
+    <section class="card">
+      <h2 class="section-heading">📋 Tournament Info</h2>
+      <p class="section-desc">Everything you need to know before you sign up.</p>
+
+      <div class="info-grid">
+        <div class="info-tile">
+          <span class="icon">📅</span>
+          <span class="label">Dates</span>
+          <span class="value">2–4 Oct<small>2026</small></span>
+        </div>
+        <div class="info-tile">
+          <span class="icon">📍</span>
+          <span class="label">Venue</span>
+          <span class="value">Goat Turf<small>Ground</small></span>
+        </div>
+        <div class="info-tile">
+          <span class="icon">🏏</span>
+          <span class="label">Player Fee</span>
+          <span class="value">₹1,600<small>Registration</small></span>
+        </div>
+        <div class="info-tile">
+          <span class="icon">👑</span>
+          <span class="label">Owner Fee</span>
+          <span class="value">₹5,000<small>Team Ownership</small></span>
+        </div>
+      </div>
+      <div class="stumps-decor" aria-hidden="true">
+        <div class="stump"><div class="bail"></div></div>
+        <div class="stump"></div>
+        <div class="stump"></div>
+      </div>
+    </section>
+
+    <!-- ===================== REGISTRATION FORM ===================== -->
+    <section class="card">
+      <h2 class="section-heading"><span class="num">1</span> Player Registration</h2>
+      <p class="section-desc">Fill in your details below to secure your spot in BPL 6. All fields are required.</p>
+
+      <form id="registrationForm" novalidate>
+        <div class="form-grid">
+
+          <div class="form-group full">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="fullName" placeholder="e.g. Virat Kohli" autocomplete="name" />
+            <span class="field-error" id="err-fullName"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="role">Playing Role</label>
+            <select id="role" name="role">
+              <option value="" disabled selected>Select your role</option>
+              <option value="Batsman">Batsman</option>
+              <option value="Bowler">Bowler</option>
+              <option value="All Rounder">All Rounder</option>
+            </select>
+            <span class="field-error" id="err-role"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+            <span class="field-error" id="err-email"></span>
+          </div>
+
+          <div class="form-group full">
+            <label for="mobile">Mobile Number</label>
+            <input type="tel" id="mobile" name="mobile" placeholder="10-digit mobile number" maxlength="10" autocomplete="tel" inputmode="numeric" />
+            <span class="field-error" id="err-mobile"></span>
+          </div>
+
+          <div class="form-group full">
+            <div class="owner-toggle">
+              <div class="owner-text">
+                👑 Want to be an Owner?
+                <small>Own a team this season for an additional ₹5,000</small>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="wantsOwner" name="wantsOwner" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group full">
+            <div class="fee-preview" id="feePreview">
+              Total Payable: <strong>₹1,600</strong>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <span class="btn-label">Register Now 🏏</span>
+            <span class="spinner" aria-hidden="true"></span>
+          </button>
+
+          <div class="form-status" id="formStatus"></div>
+
+        </div>
+      </form>
+    </section>
+
+    <!-- ===================== PAYMENT QR SECTION ===================== -->
+    <section class="card">
+      <h2 class="section-heading"><span class="num">2</span> Payment</h2>
+      <p class="section-desc">Scan the QR code below using any UPI app, or pay in cash to a committee member.</p>
+
+      <div class="qr-wrap">
+        <div class="qr-frame">
+          <span class="qr-corner tl"></span>
+          <span class="qr-corner tr"></span>
+          <span class="qr-corner bl"></span>
+          <span class="qr-corner br"></span>
+          <!-- Replace qr-code.png in this folder with your actual payment QR code image -->
+          <img src="qr-code.png" alt="BPL 6 Registration Payment QR Code" />
+        </div>
+        <p class="qr-instructions">
+          <strong>Scan to pay <span id="qrFeeAmount">₹1,600</span></strong><br/>
+          via UPI, or pay Cash to a committee member, then complete the form above to confirm your spot in BPL 6.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer>
+      <div class="committee-title">🏏 BPL 6 Committee</div>
+      <ul class="committee-list">
+        <li>Vikash Sharma<span>9831939952</span></li>
+        <li>Raju Tiwari</li>
+        <li>Anuj Agarwal</li>
+        <li>Shivam Agarwal</li>
+        <li>Aniket Gupta</li>
+        <li>Pawan Jaiswal</li>
+      </ul>
+      <div>Made with <span class="heart">❤️</span> for BPL 6</div>
+      <div class="credit">Designed with ❤️ by Pawan</div>
+    </footer>
+
+  </div>
+
+  <!-- ===================== SUCCESS MODAL ===================== -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-box">
+      <span class="modal-emoji">🎉</span>
+      <h3>Registration Successful!</h3>
+      <p>Welcome to Brothers Premier League 6. See you on the pitch, champion!</p>
+      <button class="modal-close" id="modalCloseBtn">Awesome!</button>
+    </div>
+  </div>
+
+<script>
+  // =========================================================
+  // GOOGLE APPS SCRIPT WEB APP URL
+  // TODO: Replace with your deployed Google Apps Script Web App URL
+  // =========================================================
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8u12K4pgI1DjTSXsHLwytwgKTmpI7BHH2J85Cn6NA5nwfL3pgiy5gsz0BXpnNUYJK/exec";
+
+  // ---------------------------------------------------------
+  // Generate floating cricket-ball particles for background
+  // ---------------------------------------------------------
+  (function createParticles(){
+    const container = document.getElementById('particles');
+    const count = 18;
+    for(let i = 0; i < count; i++){
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 6 + Math.random() * 10;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.animationDuration = (10 + Math.random() * 14) + 's';
+      p.style.animationDelay = (Math.random() * 12) + 's';
+      container.appendChild(p);
+    }
+  })();
+
+  // ---------------------------------------------------------
+  // Form elements
+  // ---------------------------------------------------------
+  const form = document.getElementById('registrationForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const formStatus = document.getElementById('formStatus');
+  const successModal = document.getElementById('successModal');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+  const fields = {
+    fullName: document.getElementById('fullName'),
+    role: document.getElementById('role'),
+    email: document.getElementById('email'),
+    mobile: document.getElementById('mobile')
+  };
+
+  const wantsOwnerCheckbox = document.getElementById('wantsOwner');
+  const feePreview = document.getElementById('feePreview');
+  const qrFeeAmount = document.getElementById('qrFeeAmount');
+
+  // ---------------------------------------------------------
+  // Fee calculation: base player fee + optional owner fee
+  // ---------------------------------------------------------
+  const PLAYER_FEE = 1600;
+  const OWNER_FEE = 5000;
+
+  function formatRupees(amount){
+    return '₹' + amount.toLocaleString('en-IN');
+  }
+
+  function getTotalFee(){
+    return PLAYER_FEE + (wantsOwnerCheckbox.checked ? OWNER_FEE : 0);
+  }
+
+  function updateFeeDisplay(){
+    const total = formatRupees(getTotalFee());
+    feePreview.innerHTML = 'Total Payable: <strong>' + total + '</strong>';
+    qrFeeAmount.textContent = total;
+  }
+
+  wantsOwnerCheckbox.addEventListener('change', updateFeeDisplay);
+  updateFeeDisplay();
+
+  function setError(fieldName, message){
+    const input = fields[fieldName];
+    const errorEl = document.getElementById('err-' + fieldName);
+    if(message){
+      input.classList.add('invalid');
+      errorEl.textContent = message;
+    } else {
+      input.classList.remove('invalid');
+      errorEl.textContent = '';
+    }
+  }
+
+  // ---------------------------------------------------------
+  // Client-side validation
+  // ---------------------------------------------------------
+  function validateForm(){
+    let isValid = true;
+
+    const nameVal = fields.fullName.value.trim();
+    if(!nameVal){
+      setError('fullName', 'Please enter your full name.');
+      isValid = false;
+    } else {
+      setError('fullName', '');
+    }
+
+    const roleVal = fields.role.value;
+    if(!roleVal){
+      setError('role', 'Please select your playing role.');
+      isValid = false;
+    } else {
+      setError('role', '');
+    }
+
+    const emailVal = fields.email.value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!emailVal || !emailPattern.test(emailVal)){
+      setError('email', 'Please enter a valid email address.');
+      isValid = false;
+    } else {
+      setError('email', '');
+    }
+
+    const mobileVal = fields.mobile.value.trim();
+    const mobilePattern = /^[6-9]\d{9}$/; // Indian 10-digit mobile format
+    if(!mobileVal || !mobilePattern.test(mobileVal)){
+      setError('mobile', 'Enter a valid 10-digit Indian mobile number.');
+      isValid = false;
+    } else {
+      setError('mobile', '');
+    }
+
+    return isValid;
+  }
+
+  // live-clear individual field errors as user types
+  fields.mobile.addEventListener('input', () => {
+    fields.mobile.value = fields.mobile.value.replace(/\D/g, '').slice(0, 10);
+  });
+  Object.values(fields).forEach(input => {
+    input.addEventListener('input', () => setError(input.name, ''));
+    input.addEventListener('change', () => setError(input.name, ''));
+  });
+
+  // ---------------------------------------------------------
+  // Submit button loading state helpers
+  // ---------------------------------------------------------
+  function setLoading(isLoading){
+    submitBtn.disabled = isLoading;
+    submitBtn.classList.toggle('loading', isLoading);
+  }
+
+  function showModal(){
+    successModal.classList.add('show');
+  }
+  function hideModal(){
+    successModal.classList.remove('show');
+  }
+  modalCloseBtn.addEventListener('click', hideModal);
+  successModal.addEventListener('click', (e) => {
+    if(e.target === successModal) hideModal();
+  });
+
+  // ---------------------------------------------------------
+  // Form submission -> Google Apps Script Web App
+  // ---------------------------------------------------------
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    formStatus.textContent = '';
+
+    if(!validateForm()){
+      formStatus.textContent = 'Please fix the highlighted fields above.';
+      return;
+    }
+
+    const payload = {
+      fullName: fields.fullName.value.trim(),
+      role: fields.role.value,
+      email: fields.email.value.trim(),
+      mobile: fields.mobile.value.trim(),
+      wantsOwner: wantsOwnerCheckbox.checked ? 'Yes' : 'No',
+      totalFee: getTotalFee()
+    };
+
+    setLoading(true);
+
+    // URL-encoded form data is used for compatibility with Apps Script doPost(e.parameter)
+    const body = new URLSearchParams(payload);
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors', // Apps Script web apps don't return CORS headers; response body is unreadable
+      body: body
+    })
+    .then(() => {
+      // With mode: 'no-cors', a resolved promise (no thrown error) is treated as success
+      setLoading(false);
+      form.reset();
+      updateFeeDisplay();
+      showModal();
+    })
+    .catch((err) => {
+      console.error('Registration submission failed:', err);
+      setLoading(false);
+      formStatus.textContent = 'Something went wrong. Please check your connection and try again.';
+    });
+  });
+</script>
+
+</body>
+</html>
