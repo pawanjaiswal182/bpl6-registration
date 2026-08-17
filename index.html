@@ -936,7 +936,7 @@
         </div>
         <p class="qr-instructions">
           <strong>Scan to pay <span id="qrFeeAmount">₹1,600</span></strong><br/>
-          via UPI, or pay Cash to a committee member.
+          via UPI, or pay Cash to a committee member, then complete the form above to confirm your spot in BPL 6.
         </p>
       </div>
     </section>
@@ -1052,6 +1052,9 @@
   // ---------------------------------------------------------
   // Client-side validation
   // ---------------------------------------------------------
+  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const MOBILE_PATTERN = /^[6-9]\d{9}$/; // Indian 10-digit mobile format
+
   function validateForm(){
     let isValid = true;
 
@@ -1072,8 +1075,7 @@
     }
 
     const emailVal = fields.email.value.trim();
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(!emailVal || !emailPattern.test(emailVal)){
+    if(!emailVal || !EMAIL_PATTERN.test(emailVal)){
       setError('email', 'Please enter a valid email address.');
       isValid = false;
     } else {
@@ -1081,9 +1083,8 @@
     }
 
     const mobileVal = fields.mobile.value.trim();
-    const mobilePattern = /^[6-9]\d{9}$/; // Indian 10-digit mobile format
-    if(!mobileVal || !mobilePattern.test(mobileVal)){
-      setError('mobile', 'Enter a valid 10-digit Indian mobile number.');
+    if(!mobileVal || !MOBILE_PATTERN.test(mobileVal)){
+      setError('mobile', 'Enter a valid mobile number.');
       isValid = false;
     } else {
       setError('mobile', '');
@@ -1099,6 +1100,21 @@
   Object.values(fields).forEach(input => {
     input.addEventListener('input', () => setError(input.name, ''));
     input.addEventListener('change', () => setError(input.name, ''));
+  });
+
+  // instant validation on blur for email and mobile, so mistakes are caught before submit
+  fields.email.addEventListener('blur', () => {
+    const val = fields.email.value.trim();
+    if(val && !EMAIL_PATTERN.test(val)){
+      setError('email', 'Please enter a valid email address.');
+    }
+  });
+
+  fields.mobile.addEventListener('blur', () => {
+    const val = fields.mobile.value.trim();
+    if(val && !MOBILE_PATTERN.test(val)){
+      setError('mobile', 'Enter a valid mobile number.');
+    }
   });
 
   // ---------------------------------------------------------
