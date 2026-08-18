@@ -712,6 +712,26 @@
     margin-bottom:22px;
     line-height:1.5;
   }
+  .whatsapp-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:12px 20px;
+    margin-bottom:14px;
+    border-radius:12px;
+    background:#25D366;
+    color:#05310f;
+    font-weight:600;
+    text-decoration:none;
+    font-size:0.95rem;
+    transition:background 0.2s ease, transform 0.2s ease;
+  }
+  .whatsapp-btn:hover{
+    background:#1ebe5b;
+    transform:translateY(-1px);
+  }
+
   .modal-close{
     padding:11px 28px;
     border:none;
@@ -936,7 +956,7 @@
         </div>
         <p class="qr-instructions">
           <strong>Scan to pay <span id="qrFeeAmount">₹1,600</span></strong><br/>
-          via UPI, or pay Cash to a committee member.
+          via UPI, or pay Cash to a committee member, then complete the form above to confirm your spot in BPL 6.
         </p>
       </div>
     </section>
@@ -964,6 +984,7 @@
       <span class="modal-emoji">🎉</span>
       <h3>Registration Successful!</h3>
       <p>Welcome to Brothers Premier League 6. See you on the pitch, champion!</p>
+      <a class="whatsapp-btn" id="whatsappJoinBtn" href="#" target="_blank" rel="noopener noreferrer">📲 Join BPL 6 WhatsApp Group</a>
       <button class="modal-close" id="modalCloseBtn">Awesome!</button>
     </div>
   </div>
@@ -974,6 +995,10 @@
   // TODO: Replace with your deployed Google Apps Script Web App URL
   // =========================================================
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8u12K4pgI1DjTSXsHLwytwgKTmpI7BHH2J85Cn6NA5nwfL3pgiy5gsz0BXpnNUYJK/exec";
+
+  // WhatsApp group invite link shown after a successful registration
+  const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/LfQ174TJ4gp6dulNZGCh1r?s=cl&p=a&ilr=1";
+  document.getElementById('whatsappJoinBtn').href = WHATSAPP_GROUP_URL;
 
   // ---------------------------------------------------------
   // Generate floating cricket-ball particles for background
@@ -1084,7 +1109,7 @@
 
     const mobileVal = fields.mobile.value.trim();
     if(!mobileVal || !MOBILE_PATTERN.test(mobileVal)){
-      setError('mobile', 'Enter a valid mobile number.');
+      setError('mobile', 'Enter a valid 10-digit Indian mobile number.');
       isValid = false;
     } else {
       setError('mobile', '');
@@ -1113,7 +1138,7 @@
   fields.mobile.addEventListener('blur', () => {
     const val = fields.mobile.value.trim();
     if(val && !MOBILE_PATTERN.test(val)){
-      setError('mobile', 'Enter a valid mobile number.');
+      setError('mobile', 'Enter a valid 10-digit Indian mobile number.');
     }
   });
 
