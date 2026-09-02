@@ -282,6 +282,113 @@
   }
 
   /* ============================= */
+  /* TABS                           */
+  /* ============================= */
+  .tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:28px;
+    background:rgba(5,7,15,0.35);
+    border:1px solid var(--glass-border);
+    border-radius:16px;
+    padding:6px;
+  }
+  .tab-btn{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:13px 16px;
+    border:none;
+    border-radius:12px;
+    background:transparent;
+    color:var(--muted);
+    font-family:'Anton', sans-serif;
+    font-size:0.95rem;
+    letter-spacing:0.8px;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .tab-btn:hover{
+    color:var(--white);
+  }
+  .tab-btn.active{
+    background:linear-gradient(135deg, var(--gold-light), var(--gold) 45%, var(--gold-deep));
+    color:#1a1305;
+    box-shadow:0 8px 20px rgba(244,196,48,0.3);
+  }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+
+  /* ============================= */
+  /* PLAYER LIST TAB                */
+  /* ============================= */
+  .player-list-empty{
+    text-align:center;
+    padding:50px 20px;
+    color:var(--muted);
+  }
+  .player-list-empty .icon{
+    font-size:2.6rem;
+    display:block;
+    margin-bottom:14px;
+  }
+  .player-table-wrap{
+    overflow-x:auto;
+  }
+  table.player-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.92rem;
+  }
+  table.player-table th, table.player-table td{
+    padding:12px 14px;
+    text-align:left;
+    border-bottom:1px solid rgba(159,176,201,0.15);
+    white-space:nowrap;
+  }
+  table.player-table th{
+    color:var(--gold);
+    font-family:'Anton', sans-serif;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    font-size:0.78rem;
+  }
+  table.player-table tbody tr:hover{
+    background:rgba(244,196,48,0.06);
+  }
+  .role-badge{
+    display:inline-block;
+    padding:3px 10px;
+    border-radius:999px;
+    font-size:0.72rem;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+  }
+  .role-badge.batsman{ background:rgba(30,138,76,0.18); color:var(--pitch-green-light); }
+  .role-badge.bowler{ background:rgba(255,84,112,0.15); color:var(--danger); }
+  .role-badge.all-rounder{ background:rgba(244,196,48,0.15); color:var(--gold); }
+  .owner-badge{
+    color:var(--gold);
+  }
+  .player-list-note{
+    margin-top:20px;
+    padding:14px 16px;
+    border-radius:12px;
+    background:rgba(244,196,48,0.06);
+    border:1px dashed rgba(244,196,48,0.3);
+    font-size:0.78rem;
+    line-height:1.6;
+    color:var(--muted);
+  }
+  .player-list-note strong{
+    color:var(--gold-light);
+  }
+
+  /* ============================= */
   /* SECTION CARD (glassmorphism)   */
   /* ============================= */
   .card{
@@ -839,6 +946,15 @@
       </div>
     </header>
 
+    <!-- ===================== TABS ===================== -->
+    <div class="tabs" role="tablist">
+      <button type="button" class="tab-btn active" id="tabBtnRegister" role="tab" aria-selected="true" aria-controls="tab-register">📝 Register</button>
+      <button type="button" class="tab-btn" id="tabBtnPlayers" role="tab" aria-selected="false" aria-controls="tab-players">🏏 Player List</button>
+    </div>
+
+    <!-- ===================== REGISTER TAB ===================== -->
+    <div class="tab-panel active" id="tab-register" role="tabpanel" aria-labelledby="tabBtnRegister">
+
     <!-- ===================== TOURNAMENT INFO ===================== -->
     <section class="card">
       <h2 class="section-heading">📋 Tournament Info</h2>
@@ -961,6 +1077,41 @@
       </div>
     </section>
 
+    </div><!-- /tab-register -->
+
+    <!-- ===================== PLAYER LIST TAB ===================== -->
+    <div class="tab-panel" id="tab-players" role="tabpanel" aria-labelledby="tabBtnPlayers" hidden>
+      <section class="card">
+        <h2 class="section-heading">🏏 Registered Players</h2>
+        <p class="section-desc">All players who have signed up for BPL 6 will appear here.</p>
+
+        <!-- Empty state shown only when there are no players to display -->
+        <div class="player-list-empty" id="playerListEmpty" hidden>
+          <span class="icon" aria-hidden="true">🧢</span>
+          <p>No players to show yet. This list will fill up as registrations come in!</p>
+        </div>
+
+        <div class="player-table-wrap" id="playerTableWrap">
+          <table class="player-table" id="playerTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody id="playerTableBody"></tbody>
+          </table>
+        </div>
+
+        <p class="player-list-note">
+          🏏 <strong>Don't get run out before the tournament even starts!</strong> 😄<br/>
+          If you're planning to play, <strong>please complete your payment and confirm your slot</strong> before the spots are taken.<br/><br/>
+          <strong>Note:</strong> If your name is missing from the list, please contact the committee members.
+        </p>
+      </section>
+    </div><!-- /tab-players -->
+
     <!-- ===================== FOOTER ===================== -->
     <footer>
       <div class="committee-title">🏏 BPL 6 Committee</div>
@@ -1017,6 +1168,182 @@
       p.style.animationDelay = (Math.random() * 12) + 's';
       container.appendChild(p);
     }
+  })();
+
+  // ---------------------------------------------------------
+  // Player List data (static placeholder, sorted A-Z by name)
+  // ---------------------------------------------------------
+  const PLAYERS = [
+    { name: "Aakash Singh", role: "Batsman" },
+    { name: "Aayush Agarwal", role: "All Rounder" },
+    { name: "Abhishek Ghosh", role: "Batsman" },
+    { name: "Abhishek Sharma", role: "All Rounder" },
+    { name: "Adarsh Jaiswal", role: "All Rounder" },
+    { name: "Aditya Joshi", role: "Batsman" },
+    { name: "Aditya Kabra", role: "All Rounder" },
+    { name: "Ajay Jha", role: "Batsman" },
+    { name: "Akash Baid", role: "All Rounder" },
+    { name: "Akash Gupta", role: "All Rounder" },
+    { name: "Akash Sharma", role: "All Rounder" },
+    { name: "Aman Jain", role: "All Rounder" },
+    { name: "Amit Singh", role: "All Rounder" },
+    { name: "Amit Surana", role: "All Rounder" },
+    { name: "Amit Tiwari", role: "All Rounder" },
+    { name: "Amrit Jain", role: "Bowler" },
+    { name: "Anand Mashi", role: "All Rounder" },
+    { name: "Aniket Gupta", role: "All Rounder" },
+    { name: "Anirudh Mundhra", role: "All Rounder" },
+    { name: "Anirudh Sarda", role: "Batsman" },
+    { name: "Ankit Singh", role: "All Rounder" },
+    { name: "Anuj Agarwal", role: "Batsman" },
+    { name: "Anurag Varshney", role: "All Rounder" },
+    { name: "Arjun Ojha", role: "All Rounder" },
+    { name: "Arka Mahato", role: "Bowler" },
+    { name: "Ashish Mishra", role: "All Rounder" },
+    { name: "Ayush Fatechandka", role: "Batsman" },
+    { name: "Ayush Singh", role: "All Rounder" },
+    { name: "Bhavin Gedia", role: "All Rounder" },
+    { name: "Bikash Kumar Gupta", role: "All Rounder" },
+    { name: "Bishak Shaw", role: "Bowler" },
+    { name: "Bishen Sharma", role: "All Rounder" },
+    { name: "Damodar Vyas", role: "Bowler" },
+    { name: "Danish Badgujar", role: "All Rounder" },
+    { name: "Debabrata Guha", role: "All Rounder" },
+    { name: "Deepak Asopa", role: "All Rounder" },
+    { name: "Dhanush Bhat", role: "Bowler" },
+    { name: "Dherya Sharma", role: "All Rounder" },
+    { name: "Dhawal", role: "All Rounder" },
+    { name: "Dinesh Yadav", role: "All Rounder" },
+    { name: "Gaurav Srivastava", role: "All Rounder" },
+    { name: "Goldi Singh", role: "All Rounder" },
+    { name: "Gopal Agarwal", role: "All Rounder" },
+    { name: "Guddu Prajapati", role: "All Rounder" },
+    { name: "Gurpreet Singh", role: "Batsman" },
+    { name: "Gyanesh Agarwal", role: "All Rounder" },
+    { name: "Harish Goel", role: "All Rounder" },
+    { name: "Haris Ali", role: "Bowler" },
+    { name: "Hitesh Baid", role: "All Rounder" },
+    { name: "Ishwar Agarwal", role: "All Rounder" },
+    { name: "Jitendra Daga", role: "All Rounder" },
+    { name: "Jitesh Choraria", role: "Batsman" },
+    { name: "Jony Kharwara", role: "All Rounder" },
+    { name: "Kailash Vaghela", role: "All Rounder" },
+    { name: "Kuldeep Kumar Kochar", role: "All Rounder" },
+    { name: "Mahesh Lahoti", role: "All Rounder" },
+    { name: "Mangal", role: "Batsman" },
+    { name: "Mankit Shaw", role: "All Rounder" },
+    { name: "Manoj Kochar", role: "Bowler" },
+    { name: "Mayank Saraogi", role: "All Rounder" },
+    { name: "Milan Kochar", role: "All Rounder" },
+    { name: "Nakul Asopa", role: "All Rounder" },
+    { name: "Nikhil Agarwal", role: "All Rounder" },
+    { name: "Nikhil Singh", role: "Batsman" },
+    { name: "Nikunj Asopa", role: "All Rounder" },
+    { name: "Nitesh Soni", role: "All Rounder" },
+    { name: "Paras Choudhary", role: "All Rounder" },
+    { name: "Parminder Singh", role: "Batsman" },
+    { name: "Pawan Jaiswal", role: "All Rounder" },
+    { name: "Prabhat Agarwal", role: "Batsman" },
+    { name: "Prabuddh Saxena", role: "All Rounder" },
+    { name: "Prakash Bagla", role: "All Rounder" },
+    { name: "Prakash Baid", role: "All Rounder" },
+    { name: "Pranjal Pandey", role: "Batsman" },
+    { name: "Prateek R Agarwal", role: "All Rounder" },
+    { name: "Pratik Sharma", role: "All Rounder" },
+    { name: "Prem Mogra", role: "All Rounder" },
+    { name: "Punit Gupta", role: "All Rounder" },
+    { name: "Raashik Saraf", role: "All Rounder" },
+    { name: "Raghav Munshi", role: "All Rounder" },
+    { name: "Rahul Damani", role: "All Rounder" },
+    { name: "Rahul Jaiswal", role: "All Rounder" },
+    { name: "Rahul Pandey", role: "All Rounder" },
+    { name: "Rahul Saraogi", role: "Batsman" },
+    { name: "Rahul Shaw", role: "All Rounder" },
+    { name: "Rahul Singh", role: "Batsman" },
+    { name: "Raj Agarwal", role: "All Rounder" },
+    { name: "Raj Agarwal", role: "All Rounder" },
+    { name: "Rajat Agarwal", role: "All Rounder" },
+    { name: "Rajat Singhi", role: "Bowler" },
+    { name: "Rajesh Jaiswal", role: "All Rounder" },
+    { name: "Raju Tiwari", role: "All Rounder" },
+    { name: "Ramakant Asopa", role: "All Rounder" },
+    { name: "Raunak Jaiswal", role: "All Rounder" },
+    { name: "Ravi Kumar Shaw", role: "All Rounder" },
+    { name: "Rishab Baid", role: "All Rounder" },
+    { name: "Ritesh Singhania", role: "All Rounder" },
+    { name: "Robin Tripathi", role: "All Rounder" },
+    { name: "Rohit Singh", role: "All Rounder" },
+    { name: "Rohit Vyas", role: "All Rounder" },
+    { name: "Ronak Lunia", role: "Batsman" },
+    { name: "Rupesh Singh", role: "Batsman" },
+    { name: "Sagar Bari", role: "Bowler" },
+    { name: "Sandip Jaiswal", role: "Batsman" },
+    { name: "Sanky Sharma", role: "All Rounder" },
+    { name: "Shashi Kant Verma", role: "All Rounder" },
+    { name: "Shivam Agarwal", role: "All Rounder" },
+    { name: "Shivam Jain", role: "All Rounder" },
+    { name: "Shivam Kumar Gupta", role: "Batsman" },
+    { name: "Shivdeep Asopa", role: "All Rounder" },
+    { name: "Shubham Ravrani", role: "All Rounder" },
+    { name: "Shyam Agarwal", role: "All Rounder" },
+    { name: "Sourav Agarwal", role: "All Rounder" },
+    { name: "Sourav Modi", role: "Batsman" },
+    { name: "Subham Agarwal", role: "Batsman" },
+    { name: "Subham Damani", role: "All Rounder" },
+    { name: "Sudhanshu Jaiswal", role: "All Rounder" },
+    { name: "Suman Bagla", role: "All Rounder" },
+    { name: "Sunil Dinodia", role: "All Rounder" },
+    { name: "Suraj Singh", role: "All Rounder" },
+    { name: "Surya Daga", role: "All Rounder" },
+    { name: "Vikash Pareek", role: "All Rounder" },
+    { name: "Vikash Sharma", role: "All Rounder" },
+    { name: "Vikash Yadav", role: "All Rounder" },
+    { name: "Vikram Kataria", role: "All Rounder" },
+    { name: "Vineet Kabra", role: "All Rounder" },
+    { name: "Vineet Kabra Sr", role: "All Rounder" },
+    { name: "Virendra Jain", role: "Batsman" },
+    { name: "Yogesh Agarwal", role: "All Rounder" },
+    { name: "Yogesh Bhabhra", role: "All Rounder" },
+    { name: "Zamir Ahmed", role: "All Rounder" }
+  ];
+
+  function roleBadgeClass(role){
+    return role.toLowerCase().replace(/\s+/g, '-');
+  }
+
+  (function renderPlayerList(){
+    const tbody = document.getElementById('playerTableBody');
+    tbody.innerHTML = PLAYERS.map((p, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${p.name}</td>
+        <td><span class="role-badge ${roleBadgeClass(p.role)}">${p.role}</span></td>
+      </tr>
+    `).join('');
+  })();
+
+  // ---------------------------------------------------------
+  // Tab switching (Register / Player List)
+  // ---------------------------------------------------------
+  (function setupTabs(){
+    const tabs = [
+      { btn: document.getElementById('tabBtnRegister'), panel: document.getElementById('tab-register') },
+      { btn: document.getElementById('tabBtnPlayers'), panel: document.getElementById('tab-players') }
+    ];
+
+    function activate(target){
+      tabs.forEach(({ btn, panel }) => {
+        const isActive = panel === target;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        panel.classList.toggle('active', isActive);
+        panel.hidden = !isActive;
+      });
+    }
+
+    tabs.forEach(({ btn, panel }) => {
+      btn.addEventListener('click', () => activate(panel));
+    });
   })();
 
   // ---------------------------------------------------------
